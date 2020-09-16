@@ -1,5 +1,6 @@
 package com.thoughtworks.rslist.api;
 
+import com.thoughtworks.rslist.domain.User;
 import com.thoughtworks.rslist.domain.rsEvent;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,12 +12,14 @@ import java.util.List;
 @RestController
 public class RsController {
   private List<rsEvent> rsList = initial_rsEvent();
+  UserController userController = new UserController();
 
   public static List<rsEvent> initial_rsEvent() {
     List<rsEvent> rsEventList = new ArrayList<>();
-    rsEventList.add(new rsEvent("第一条事件","无标签"));
-    rsEventList.add(new rsEvent("第二条事件","无标签"));
-    rsEventList.add(new rsEvent("第三条事件","无标签"));
+    User user = new User("dgf","male",19,"a@b.com","18888888888");
+    rsEventList.add(new rsEvent("第一条事件","无标签",user));
+    rsEventList.add(new rsEvent("第二条事件","无标签",user));
+    rsEventList.add(new rsEvent("第三条事件","无标签",user));
     return rsEventList;
   }
   @GetMapping("/rs/list")
@@ -32,6 +35,10 @@ public class RsController {
   }
   @PostMapping("/rs/event")
   public void add_rsevent(@RequestBody rsEvent rsEvent){
+    //遍历热搜列表是不行的，需要遍历用户列表（因为可能添加了用户，但该用户没有写热搜）
+    if(userController.is_exist_username(rsEvent.getUser())){
+      userController.add_user(rsEvent.getUser());
+    }
     rsList.add(rsEvent);
   }
   @PatchMapping("/rs/{index}/event")
