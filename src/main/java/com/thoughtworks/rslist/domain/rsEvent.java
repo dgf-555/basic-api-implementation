@@ -1,5 +1,8 @@
 package com.thoughtworks.rslist.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class rsEvent {
     private String eventname;
     private String keyword;
@@ -13,11 +16,11 @@ public class rsEvent {
     public rsEvent(){
 
     }
-
+    @JsonIgnore
     public User getUser() {
         return user;
     }
-
+    @JsonProperty
     public void setUser(User user) {
         this.user = user;
     }

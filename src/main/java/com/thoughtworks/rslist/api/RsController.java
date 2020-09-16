@@ -2,6 +2,9 @@ package com.thoughtworks.rslist.api;
 
 import com.thoughtworks.rslist.domain.User;
 import com.thoughtworks.rslist.domain.rsEvent;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,7 +15,7 @@ import java.util.List;
 @RestController
 public class RsController {
   private List<rsEvent> rsList = initial_rsEvent();
-  UserController userController = new UserController();
+  UserController userController = new UserController();//通过该类中的is_exist_username方法访问rslist数组
 
   public static List<rsEvent> initial_rsEvent() {
     List<rsEvent> rsEventList = new ArrayList<>();
@@ -23,29 +26,36 @@ public class RsController {
     return rsEventList;
   }
   @GetMapping("/rs/list")
-  public List<rsEvent> get_a_list(@RequestParam(required=false) Integer start,@RequestParam(required=false) Integer end){
+  public ResponseEntity get_a_list(@RequestParam(required=false) Integer start,@RequestParam(required=false) Integer end){
     if(start==null&&end==null){
-      return rsList;
+      return ResponseEntity.ok(rsList);
     }
-    return rsList.subList(start-1,end);
+    return ResponseEntity.ok(rsList.subList(start-1,end));
   }
   @GetMapping("/rs/{index}")
-  public rsEvent get_one_event(@PathVariable int index){
-    return rsList.get(index-1);
+  public ResponseEntity<rsEvent> get_one_event(@PathVariable int index){
+    return ResponseEntity.ok(rsList.get(index-1));
   }
   @PostMapping("/rs/event")
-  public void add_rsevent(@RequestBody rsEvent rsEvent){
+  public ResponseEntity add_rsevent(@RequestBody rsEvent rsEvent){
     //遍历热搜列表是不行的，需要遍历用户列表（因为可能添加了用户，但该用户没有写热搜）
     if(userController.is_exist_username(rsEvent.getUser())){
       userController.add_user(rsEvent.getUser());
     }
     rsList.add(rsEvent);
+    //在头部返回index值同时返回201
+    HttpHeaders headers = new HttpHeaders();
+    String index = String.valueOf(rsList.indexOf(rsEvent));
+    headers.add("index", index);
+    //return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    return ResponseEntity.status(HttpStatus.CREATED).header("index",index).body(null);
   }
   @PatchMapping("/rs/{index}/event")
-  public void update_rsevent(@PathVariable int index,@RequestBody rsEvent rsEvent){
+  public ResponseEntity update_rsevent(@PathVariable int index,@RequestBody rsEvent rsEvent){
     if(rsEvent.getEventname()!=null&&rsEvent.getKeyword()!=null){
-      rsList.remove(index-1);
-      rsList.add(index-1,rsEvent);
+      rsList.set(index-1,rsEvent);
+//      rsList.remove(index-1);
+//      rsList.add(index-1,rsEvent);
     }
     else if(rsEvent.getEventname()==null&&rsEvent.getKeyword()!=null){
       rsList.get(index-1).setKeyword(rsEvent.getKeyword());
@@ -53,10 +63,12 @@ public class RsController {
     else {
       rsList.get(index-1).setEventname(rsEvent.getEventname());
     }
+    return ResponseEntity.created(null).build();
   }
   @DeleteMapping("/rs/{index}")
-  public void delete_rsevent(@PathVariable int index){
+  public ResponseEntity delete_rsevent(@PathVariable int index){
     rsList.remove(index-1);
+    return ResponseEntity.created(null).build();
   }
 
 }

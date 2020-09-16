@@ -1,6 +1,7 @@
 package com.thoughtworks.rslist.api;
 
 import com.thoughtworks.rslist.domain.User;
+import com.thoughtworks.rslist.domain.rsEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +13,13 @@ import java.util.List;
 
 @RestController
 public class UserController {
-    List<User> userList = new ArrayList<>();
+    private List<User> userList = new ArrayList<>();
+
+//    public List<User> initial_userList() {
+//        List<User> userList = new ArrayList<>();
+//        userList.add(new  User("dgf","male",19,"a@b.com","18888888888"));
+//        return userList;
+//    }
 
     @PostMapping("/user")
     public void add_user(@RequestBody @Valid User user){
