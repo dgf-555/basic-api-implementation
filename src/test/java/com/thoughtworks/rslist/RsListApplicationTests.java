@@ -1,5 +1,6 @@
 package com.thoughtworks.rslist;
 
+import com.thoughtworks.rslist.api.RsController;
 import com.thoughtworks.rslist.domain.rsEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 
 import java.util.ArrayList;
@@ -29,7 +32,7 @@ class RsControllerTest {
     private MockMvc mockMvc;
     @BeforeEach
     public void setup(){
-        initial_rsEvent();
+        mockMvc = MockMvcBuilders.standaloneSetup(new RsController()).build();
     }
     @Test
     public void should_get_rs_list() throws Exception {
