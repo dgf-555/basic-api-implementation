@@ -4,6 +4,8 @@ import com.thoughtworks.rslist.domain.User;
 import com.thoughtworks.rslist.domain.rsEvent;
 import com.thoughtworks.rslist.exception.Error;
 import com.thoughtworks.rslist.exception.RsEventNotValidException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import java.util.List;
 public class RsController {
   private List<rsEvent> rsList = initial_rsEvent();
   UserController userController = new UserController();//通过该类中的is_exist_username方法访问rslist数组
+  Logger logger = LoggerFactory.getLogger(RsController.class);
 
   public static List<rsEvent> initial_rsEvent() {
     List<rsEvent> rsEventList = new ArrayList<>();
@@ -92,6 +95,7 @@ public class RsController {
     }
     Error error = new Error();
     error.setError(errorMessage);
+    logger.error(errorMessage);
     return ResponseEntity.badRequest().body(error);
   }
 }
