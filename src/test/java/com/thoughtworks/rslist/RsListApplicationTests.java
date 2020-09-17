@@ -40,13 +40,10 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].eventname", is("第一条事件")))
                 .andExpect(jsonPath("$[0].keyword", is("无标签")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("第二条事件")))
                 .andExpect(jsonPath("$[1].keyword", is("无标签")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[2].eventname", is("第三条事件")))
                 .andExpect(jsonPath("$[2].keyword", is("无标签")))
-                .andExpect(jsonPath("$[2]",not(hasKey("user"))))
                 .andExpect(status().isOk());
     }
 
@@ -56,17 +53,14 @@ class RsControllerTest {
         mockMvc.perform(get("/rs/1"))
                 .andExpect(jsonPath("$.eventname", is("第一条事件")))
                 .andExpect(jsonPath("$.keyword", is("无标签")))
-                .andExpect(jsonPath("$",not(hasKey("user"))))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/rs/2"))
                 .andExpect(jsonPath("$.eventname", is("第二条事件")))
                 .andExpect(jsonPath("$.keyword", is("无标签")))
-                .andExpect(jsonPath("$",not(hasKey("user"))))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/rs/3"))
                 .andExpect(jsonPath("$.eventname", is("第三条事件")))
                 .andExpect(jsonPath("$.keyword", is("无标签")))
-                .andExpect(jsonPath("$",not(hasKey("user"))))
                 .andExpect(status().isOk());
     }
 
@@ -77,31 +71,24 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].eventname", is("第一条事件")))
                 .andExpect(jsonPath("$[0].keyword", is("无标签")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("第二条事件")))
                 .andExpect(jsonPath("$[1].keyword", is("无标签")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/rs/list?start=2&end=3"))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].eventname", is("第二条事件")))
                 .andExpect(jsonPath("$[0].keyword", is("无标签")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("第三条事件")))
                 .andExpect(jsonPath("$[1].keyword", is("无标签")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/rs/list?start=1&end=3"))
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].eventname", is("第一条事件")))
                 .andExpect(jsonPath("$[0].keyword", is("无标签")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("第二条事件")))
                 .andExpect(jsonPath("$[1].keyword", is("无标签")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[2].eventname", is("第三条事件")))
                 .andExpect(jsonPath("$[2].keyword", is("无标签")))
-                .andExpect(jsonPath("$[2]",not(hasKey("user"))))
                 .andExpect(status().isOk());
     }
 
@@ -119,13 +106,10 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("第二条事件")))
                 .andExpect(jsonPath("$[1].keyword", is("无标签")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[2].eventname", is("第三条事件")))
                 .andExpect(jsonPath("$[2].keyword", is("无标签")))
-                .andExpect(jsonPath("$[2]",not(hasKey("user"))))
                 .andExpect(status().isOk());
         mockMvc.perform(patch("/rs/2/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -133,13 +117,10 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[2].eventname", is("第三条事件")))
                 .andExpect(jsonPath("$[2].keyword", is("无标签")))
-                .andExpect(jsonPath("$[2]",not(hasKey("user"))))
                 .andExpect(status().isOk());
         mockMvc.perform(patch("/rs/3/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -147,13 +128,10 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(jsonPath("$[2]",not(hasKey("user"))))
                 .andExpect(status().isOk());
     }
     @Test
@@ -185,13 +163,10 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("人肉涨价了")))
                 .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(jsonPath("$[2]",not(hasKey("user"))))
                 .andExpect(status().isOk());
         rsEvent rsEvent2 = new rsEvent(null,"别吃",user);
         //ObjectMapper objectMapper = new ObjectMapper();
@@ -203,13 +178,10 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("别吃")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("人肉涨价了")))
                 .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(jsonPath("$[2]",not(hasKey("user"))))
                 .andExpect(status().isOk());
         rsEvent rsEvent3 = new rsEvent(null,"快买",user);
         //ObjectMapper objectMapper = new ObjectMapper();
@@ -221,13 +193,10 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("别吃")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("人肉涨价了")))
                 .andExpect(jsonPath("$[1].keyword", is("快买")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(jsonPath("$[2]",not(hasKey("user"))))
                 .andExpect(status().isOk());
     }
     @Test
@@ -244,16 +213,12 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(4)))
                 .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("别吃")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("人肉涨价了")))
                 .andExpect(jsonPath("$[1].keyword", is("快买")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(jsonPath("$[2]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[3].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[3].keyword", is("经济")))
-                .andExpect(jsonPath("$[3]",not(hasKey("user"))))
                 .andExpect(status().isOk());
     }
     @Test
@@ -264,33 +229,27 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].eventname", is("人肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("快买")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(jsonPath("$[2]",not(hasKey("user"))))
                 .andExpect(status().isOk());
         mockMvc.perform(delete("/rs/1")).andExpect(status().isCreated());
         mockMvc.perform(get("/rs/list"))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(status().isOk());
         mockMvc.perform(delete("/rs/1")).andExpect(status().isCreated());
         mockMvc.perform(get("/rs/list"))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(status().isOk());
     }
-    //本次作业新需求
+    //customize-response作业需求
     @Test
     @Order(8)
     public void should_add_user_when_user_not_in_userlist() throws Exception {
@@ -305,10 +264,39 @@ class RsControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[0]",not(hasKey("user"))))
                 .andExpect(jsonPath("$[1].eventname", is("遇到困难")))
                 .andExpect(jsonPath("$[1].keyword", is("奥利给")))
-                .andExpect(jsonPath("$[1]",not(hasKey("user"))))
                 .andExpect(status().isOk());
     }
+    //error-handling作业需求
+    @Test
+    @Order(9)
+    public void should_throw_rsevent_not_valid_index_exception_when_get_and_delete() throws Exception {
+        mockMvc.perform(get("/rs/0"))
+                .andExpect(jsonPath("$.error",is("invalid index")))
+                .andExpect(status().isBadRequest());
+        mockMvc.perform(delete("/rs/0"))
+                .andExpect(jsonPath("$.error",is("invalid index")))
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    @Order(10)
+    public void should_throw_method_argument_not_valid_exception() throws Exception {
+        User user = new User("dgfdgfdgf","male",19,"a@b.com","18888888888");
+        rsEvent rsEvent = new rsEvent("猪肉涨价了","经济",user);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(rsEvent);
+        //String jsonString = "{\"eventname\":\"猪肉涨价了\",\"keyword\":\"经济\"}";
+        mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.error",is("invalid param")))
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    @Order(11)
+    public void should_throw_rsevent_not_valid_range_exception_when_get_list() throws Exception {
+        mockMvc.perform(get("/rs/list?start=0&end=8"))
+                .andExpect(jsonPath("$.error",is("invalid request param")))
+                .andExpect(status().isBadRequest());
+    }
+
 }

@@ -3,9 +3,12 @@ package com.thoughtworks.rslist.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.Valid;
+
 public class rsEvent {
     private String eventname;
     private String keyword;
+    @Valid
     private User user;
 
     public rsEvent(String eventname, String keyword, User user) {
@@ -16,11 +19,11 @@ public class rsEvent {
     public rsEvent(){
 
     }
-    @JsonIgnore
+
     public User getUser() {
         return user;
     }
-    @JsonProperty
+
     public void setUser(User user) {
         this.user = user;
     }

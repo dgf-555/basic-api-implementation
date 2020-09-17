@@ -101,6 +101,16 @@ class UserControllerTest {
         mockMvc.perform(post("/user").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
+    @Test
+    //@Order(8)
+    public void should_throw_exception_when_invalid_username() throws Exception {
+        User user = new User("dgfdgfdgf","male",19,"a@b.com","18888888888");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(user);
+        mockMvc.perform(post("/user").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.error",is("invalid user")))
+                .andExpect(status().isBadRequest());
+    }
 
 
 }
