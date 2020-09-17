@@ -1,32 +1,29 @@
-package com.thoughtworks.rslist.domain;
+package com.thoughtworks.rslist.po;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.*;
-
-public class User {
-    //springboot提供的限制，不需要在controller中一一判断了
-    @NotNull
-    @Size(max=8)
+@Entity
+@Table(name="user")
+public class UserPO {
+    @Id
+    @GeneratedValue
+    private int id;
     private String name;
-    @NotNull
     private String gender;
-    //@NotNull,integer才有，int没有
-    @Max(100)
-    @Min(18)
     private int age;
-    @Email
     private String email;
-    @Pattern(regexp = "1\\d{10}")
     private String phone;
     private int votenumber=10;
 
-    public User(String name, String gender, int age, String email, String phone) {
-        this.name = name;
-        this.gender = gender;
-        this.age = age;
-        this.email = email;
-        this.phone = phone;
+    public int getId() {
+        return id;
     }
-    public User(){
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

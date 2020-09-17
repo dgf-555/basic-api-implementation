@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,14 @@ public class RsController {
   UserController userController = new UserController();//通过该类中的is_exist_username方法访问rslist数组
   Logger logger = LoggerFactory.getLogger(RsController.class);
 
-  public static List<rsEvent> initial_rsEvent() {
+  public RsController() throws SQLException {
+  }
+
+//  public RsController() throws SQLException {
+//  }
+
+  public static List<rsEvent> initial_rsEvent() throws SQLException {
+    creat_table_by_jdbc();
     List<rsEvent> rsEventList = new ArrayList<>();
     User user = new User("dgf","male",19,"a@b.com","18888888888");
     rsEventList.add(new rsEvent("第一条事件","无标签",user));
@@ -32,6 +40,19 @@ public class RsController {
     rsEventList.add(new rsEvent("第三条事件","无标签",user));
     return rsEventList;
   }
+  //通过jdbc方式来和数据库连接并建表，用处不大，做示范用，以后不知道会不会有问题，如果太长了就删掉吧，rslist后期也会更改到存入数据库，到时候再改
+  private static void creat_table_by_jdbc() throws SQLException {
+    Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/rsSystem?user=root&password=dgf19981229&serverTimezone=Asia/Shanghai");
+    DatabaseMetaData metaData = connection.getMetaData();
+    ResultSet resultSet = metaData.getTables(null,null,"rsevent_create_by_jdbc",null);
+    if(!resultSet.next()){
+      String createTableSql = "create table rsevent_create_by_jdbc(eventName varchar(200) not null, keyword varchar(100) not null)";
+      Statement statement = connection.createStatement();
+      statement.execute(createTableSql);
+    }
+    connection.close();
+  }
+
   @GetMapping("/rs/list")
   public ResponseEntity get_a_list(@RequestParam(required=false) Integer start,@RequestParam(required=false) Integer end){
     if(start==null&&end==null){
