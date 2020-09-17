@@ -1,1 +1,8 @@
-
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/rsSystem
+    username: root
+    password: dgf19981229
+  jpa:
+    hibernate:
+      ddl-auto: create
