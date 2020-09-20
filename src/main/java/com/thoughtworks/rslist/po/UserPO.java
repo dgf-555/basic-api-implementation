@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class UserPO {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "userPO_id",strategy = GenerationType.AUTO)
     private int id;
     private String name;
     private String gender;
@@ -26,7 +26,7 @@ public class UserPO {
     private String phone;
     private int votenumber=10;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userPO")
     private List<RsEventPO> rsEventPOs;
 
 }

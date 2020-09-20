@@ -1,8 +1,10 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/rsSystem
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/rsSystem?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Hongkong
     username: root
     password: dgf19981229
   jpa:
     hibernate:
       ddl-auto: create
+      dialect: org.hibernate.dialect.MySQL5Dialect

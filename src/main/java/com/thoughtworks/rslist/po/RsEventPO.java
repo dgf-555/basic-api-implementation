@@ -15,7 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class RsEventPO {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "rsEventPO_id",strategy = GenerationType.AUTO)
     private int id;
     private String eventname;
     private String keyword;

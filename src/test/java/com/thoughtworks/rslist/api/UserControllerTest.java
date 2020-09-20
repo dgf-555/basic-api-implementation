@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-//import java.util.List;
 
 import java.util.List;
 
@@ -131,9 +130,11 @@ class UserControllerTest {
                 .userPO(saveduser1).build();
         rsEventRepository.save(rsEventPO3);
         //删除
-        mockMvc.perform(delete("/user/2"))
+        mockMvc.perform(delete("/user/{id}",saveduser1.getId()))
                 .andExpect(status().isOk());
         List<UserPO> all = userRepository.findAll();
-        assertEquals(2,all.size());
+        assertEquals(1,all.size());
+        List<RsEventPO> all1 = rsEventRepository.findAll();
+        assertEquals(3,all1.size());
     }
 }
