@@ -2,30 +2,37 @@ package com.thoughtworks.rslist.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class rsEvent {
-    private String eventname;
-    private String keyword;
-    @Valid
-    private User user;
 
-    public rsEvent(String eventname, String keyword, User user) {
+    @NotNull
+    private String eventname;
+    @NotNull
+    private String keyword;
+    @NotNull
+    private int userid;
+
+    public rsEvent(@NotNull String eventname, @NotNull String keyword, @NotNull int userid) {
         this.eventname = eventname;
         this.keyword = keyword;
-        this.user = user;
+        this.userid = userid;
     }
+
     public rsEvent(){
 
     }
 
-    public User getUser() {
-        return user;
+    public int getUserid() {
+        return userid;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 
     public String getEventname() {

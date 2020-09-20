@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.rslist.api.RsController;
 import com.thoughtworks.rslist.domain.User;
 import com.thoughtworks.rslist.domain.rsEvent;
+import com.thoughtworks.rslist.po.RsEventPO;
+import com.thoughtworks.rslist.po.UserPO;
+import com.thoughtworks.rslist.repository.RsEventRepository;
+import com.thoughtworks.rslist.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.core.AutoConfigureCache;
@@ -22,253 +26,190 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RsControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    //    @BeforeEach
-//    public void setup(){
-//        mockMvc = MockMvcBuilders.standaloneSetup(new RsController()).build();
-//    }
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    RsEventRepository rsEventRepository;
+    ObjectMapper objectMapper;
+    @BeforeEach
+    public void setup(){
+        objectMapper = new ObjectMapper();
+        rsEventRepository.deleteAll();
+        userRepository.deleteAll();
+    }
     @Test
-    @Order(1)
     public void should_get_rs_list() throws Exception {
+        //创建用户并添加
+        UserPO saveduser = userRepository.save(UserPO.builder()
+                .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
+        //创建热搜并添加
+        rsEvent rsEvent = new rsEvent("djn牌狗肉涨价了","经济",saveduser.getId());
+        RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO);
+        rsEvent rsEvent1 = new rsEvent("djn牌人肉涨价了","经济",saveduser.getId());
+        RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO1);
+        //测试
         mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].eventname", is("第一条事件")))
-                .andExpect(jsonPath("$[0].keyword", is("无标签")))
-                .andExpect(jsonPath("$[1].eventname", is("第二条事件")))
-                .andExpect(jsonPath("$[1].keyword", is("无标签")))
-                .andExpect(jsonPath("$[2].eventname", is("第三条事件")))
-                .andExpect(jsonPath("$[2].keyword", is("无标签")))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].eventname", is("djn牌狗肉涨价了")))
+                .andExpect(jsonPath("$[0].keyword", is("经济")))
+                .andExpect(jsonPath("$[1].eventname", is("djn牌人肉涨价了")))
+                .andExpect(jsonPath("$[1].keyword", is("经济")))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @Order(2)
     public void should_get_one_rsevent() throws Exception {
+        //创建用户并添加
+        UserPO saveduser = userRepository.save(UserPO.builder()
+                .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
+        //创建热搜并添加
+        rsEvent rsEvent = new rsEvent("djn牌猪肉涨价了","经济",saveduser.getId());
+        RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO);
+        rsEvent rsEvent1 = new rsEvent("djn牌人肉涨价了","经济",saveduser.getId());
+        RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO1);
+        //测试
         mockMvc.perform(get("/rs/1"))
-                .andExpect(jsonPath("$.eventname", is("第一条事件")))
-                .andExpect(jsonPath("$.keyword", is("无标签")))
+                .andExpect(jsonPath("$.eventname", is("djn牌猪肉涨价了")))
+                .andExpect(jsonPath("$.keyword", is("经济")))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/rs/2"))
-                .andExpect(jsonPath("$.eventname", is("第二条事件")))
-                .andExpect(jsonPath("$.keyword", is("无标签")))
-                .andExpect(status().isOk());
-        mockMvc.perform(get("/rs/3"))
-                .andExpect(jsonPath("$.eventname", is("第三条事件")))
-                .andExpect(jsonPath("$.keyword", is("无标签")))
+                .andExpect(jsonPath("$.eventname", is("djn牌人肉涨价了")))
+                .andExpect(jsonPath("$.keyword", is("经济")))
                 .andExpect(status().isOk());
     }
-
     @Test
-    @Order(3)
     public void should_get_rslist_from_start_to_end() throws Exception {
+        //创建用户并添加
+        UserPO saveduser = userRepository.save(UserPO.builder()
+                .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
+        //创建热搜并添加
+        rsEvent rsEvent = new rsEvent("djn牌猪肉涨价了","经济",saveduser.getId());
+        RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO);
+        rsEvent rsEvent1 = new rsEvent("djn牌人肉涨价了","经济",saveduser.getId());
+        RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO1);
+        rsEvent rsEvent2 = new rsEvent("djn牌狗肉涨价了","经济",saveduser.getId());
+        RsEventPO rsEventPO2 = RsEventPO.builder().eventname(rsEvent2.getEventname()).keyword(rsEvent2.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO2);
+        //测试
         mockMvc.perform(get("/rs/list?start=1&end=2"))
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].eventname", is("第一条事件")))
-                .andExpect(jsonPath("$[0].keyword", is("无标签")))
-                .andExpect(jsonPath("$[1].eventname", is("第二条事件")))
-                .andExpect(jsonPath("$[1].keyword", is("无标签")))
+                .andExpect(jsonPath("$[0].eventname", is("djn牌猪肉涨价了")))
+                .andExpect(jsonPath("$[0].keyword", is("经济")))
+                .andExpect(jsonPath("$[1].eventname", is("djn牌人肉涨价了")))
+                .andExpect(jsonPath("$[1].keyword", is("经济")))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/rs/list?start=2&end=3"))
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].eventname", is("第二条事件")))
-                .andExpect(jsonPath("$[0].keyword", is("无标签")))
-                .andExpect(jsonPath("$[1].eventname", is("第三条事件")))
-                .andExpect(jsonPath("$[1].keyword", is("无标签")))
+                .andExpect(jsonPath("$[0].eventname", is("djn牌人肉涨价了")))
+                .andExpect(jsonPath("$[0].keyword", is("经济")))
+                .andExpect(jsonPath("$[1].eventname", is("djn牌狗肉涨价了")))
+                .andExpect(jsonPath("$[1].keyword", is("经济")))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/rs/list?start=1&end=3"))
                 .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].eventname", is("第一条事件")))
-                .andExpect(jsonPath("$[0].keyword", is("无标签")))
-                .andExpect(jsonPath("$[1].eventname", is("第二条事件")))
-                .andExpect(jsonPath("$[1].keyword", is("无标签")))
-                .andExpect(jsonPath("$[2].eventname", is("第三条事件")))
-                .andExpect(jsonPath("$[2].keyword", is("无标签")))
+                .andExpect(jsonPath("$[0].eventname", is("djn牌猪肉涨价了")))
+                .andExpect(jsonPath("$[0].keyword", is("经济")))
+                .andExpect(jsonPath("$[1].eventname", is("djn牌人肉涨价了")))
+                .andExpect(jsonPath("$[1].keyword", is("经济")))
+                .andExpect(jsonPath("$[2].eventname", is("djn牌狗肉涨价了")))
+                .andExpect(jsonPath("$[2].keyword", is("经济")))
                 .andExpect(status().isOk());
     }
-
     @Test
-    @Order(4)
     public void should_update_a_rsevent() throws Exception {
-        User user = new User("dgf","male",19,"a@b.com","18888888888");
-        rsEvent rsEvent = new rsEvent("猪肉涨价了","经济",user);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonString = objectMapper.writeValueAsString(rsEvent);
-        //String jsonString = "{\"eventname\":\"猪肉涨价了\",\"keyword\":\"经济\"}";
+        //创建用户并添加
+        UserPO saveduser = userRepository.save(UserPO.builder()
+                .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
+        //创建热搜并添加
+        rsEvent rsEvent = new rsEvent("djn牌猪肉涨价了","经济",saveduser.getId());
+        RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO);
+        rsEvent rsEvent1 = new rsEvent("djn牌人肉涨价了","经济",saveduser.getId());
+        RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO1);
+        rsEvent rsEvent2 = new rsEvent("djn牌狗肉涨价了","经济",saveduser.getId());
+        RsEventPO rsEventPO2 = RsEventPO.builder().eventname(rsEvent2.getEventname()).keyword(rsEvent2.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO2);
+        //准备要修改热搜
+        rsEvent rsEvent_update = new rsEvent("djn牌牛肉涨价了","经济",saveduser.getId());
+        String jsonString = objectMapper.writeValueAsString(rsEvent_update);
         mockMvc.perform(patch("/rs/1/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
-        mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[1].eventname", is("第二条事件")))
-                .andExpect(jsonPath("$[1].keyword", is("无标签")))
-                .andExpect(jsonPath("$[2].eventname", is("第三条事件")))
-                .andExpect(jsonPath("$[2].keyword", is("无标签")))
-                .andExpect(status().isOk());
-        mockMvc.perform(patch("/rs/2/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
-        mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[1].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(jsonPath("$[2].eventname", is("第三条事件")))
-                .andExpect(jsonPath("$[2].keyword", is("无标签")))
-                .andExpect(status().isOk());
-        mockMvc.perform(patch("/rs/3/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
-        mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[1].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(status().isOk());
     }
     @Test
-    @Order(5)
-    public void should_update_rsevent_when_only_change_one_of_the_feature() throws Exception {
-        User user = new User("dgf","male",19,"a@b.com","18888888888");
-//        rsEvent rsEvent = new rsEvent("猪肉涨价了",null);
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String jsonString = objectMapper.writeValueAsString(rsEvent);
-//        //String jsonString = "{\"eventname\":\"猪肉涨价了\"}";
-//        mockMvc.perform(patch("/rs/1/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk());
-//        mockMvc.perform(get("/rs/list"))
-//                .andExpect(jsonPath("$", hasSize(3)))
-//                .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
-//                .andExpect(jsonPath("$[0].keyword", is("经济")))
-//                .andExpect(jsonPath("$[1].eventname", is("猪肉涨价了")))
-//                .andExpect(jsonPath("$[1].keyword", is("经济")))
-//                .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
-//                .andExpect(jsonPath("$[2].keyword", is("经济")))
-//                .andExpect(status().isOk());
-        rsEvent rsEvent1 = new rsEvent("人肉涨价了",null,user);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonString1 = objectMapper.writeValueAsString(rsEvent1);
-        //String jsonString1 = "{\"eventname\":\"人肉涨价了\"}";
-        mockMvc.perform(patch("/rs/2/event").content(jsonString1).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
-        mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[1].eventname", is("人肉涨价了")))
-                .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(status().isOk());
-        rsEvent rsEvent2 = new rsEvent(null,"别吃",user);
-        //ObjectMapper objectMapper = new ObjectMapper();
-        String jsonString2 = objectMapper.writeValueAsString(rsEvent2);
-        //String jsonString2 = "{\"keyword\":\"别吃\"}";
-        mockMvc.perform(patch("/rs/1/event").content(jsonString2).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
-        mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[0].keyword", is("别吃")))
-                .andExpect(jsonPath("$[1].eventname", is("人肉涨价了")))
-                .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(status().isOk());
-        rsEvent rsEvent3 = new rsEvent(null,"快买",user);
-        //ObjectMapper objectMapper = new ObjectMapper();
-        String jsonString3 = objectMapper.writeValueAsString(rsEvent3);
-        //String jsonString3 = "{\"keyword\":\"快买\"}";
-        mockMvc.perform(patch("/rs/2/event").content(jsonString3).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
-        mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[0].keyword", is("别吃")))
-                .andExpect(jsonPath("$[1].eventname", is("人肉涨价了")))
-                .andExpect(jsonPath("$[1].keyword", is("快买")))
-                .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(status().isOk());
-    }
-    @Test
-    @Order(6)
-    public void should_add_rsevent_to_relist() throws Exception {
-        User user = new User("dgf","male",19,"a@b.com","18888888888");
-        rsEvent rsEvent = new rsEvent("猪肉涨价了","经济",user);
-        ObjectMapper objectMapper = new ObjectMapper();
+    public void should_add_rsevent_to_rslist_when_the_user_is_exist() throws Exception {
+        UserPO saveduser = userRepository.save(UserPO.builder()
+                .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
+        rsEvent rsEvent = new rsEvent("猪肉涨价了","经济",saveduser.getId());
         String jsonString = objectMapper.writeValueAsString(rsEvent);
-        //String jsonString = "{\"eventname\":\"猪肉涨价了\",\"keyword\":\"经济\"}";
         mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
-        mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(4)))
-                .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[0].keyword", is("别吃")))
-                .andExpect(jsonPath("$[1].eventname", is("人肉涨价了")))
-                .andExpect(jsonPath("$[1].keyword", is("快买")))
-                .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(jsonPath("$[3].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[3].keyword", is("经济")))
-                .andExpect(status().isOk());
+        List<RsEventPO> all = rsEventRepository.findAll();
+        assertNotNull(all);
+        assertEquals(1,all.size());
+        assertEquals("猪肉涨价了",all.get(0).getEventname());
+        assertEquals(saveduser.getId(),all.get(0).getUserPO().getId());
     }
     @Test
-    @Order(7)
+    public void should_return_badrequest_when_add_rsevent_and_the_user_not_exist() throws Exception {
+        UserPO saveduser = userRepository.save(UserPO.builder()
+                .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
+        rsEvent rsEvent = new rsEvent("猪肉涨价了","经济",2);
+        String jsonString = objectMapper.writeValueAsString(rsEvent);
+        mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+    @Test
     public void should_delete_one_rsevent() throws Exception {
-        mockMvc.perform(delete("/rs/1")).andExpect(status().isCreated());
-        mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].eventname", is("人肉涨价了")))
-                .andExpect(jsonPath("$[0].keyword", is("快买")))
-                .andExpect(jsonPath("$[1].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(jsonPath("$[2].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[2].keyword", is("经济")))
-                .andExpect(status().isOk());
-        mockMvc.perform(delete("/rs/1")).andExpect(status().isCreated());
-        mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[1].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[1].keyword", is("经济")))
-                .andExpect(status().isOk());
-        mockMvc.perform(delete("/rs/1")).andExpect(status().isCreated());
-        mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(status().isOk());
-    }
-    //customize-response作业需求
-    @Test
-    @Order(8)
-    public void should_add_user_when_user_not_in_userlist() throws Exception {
-        User user = new User("DGF","male",19,"a@b.com","18888888888");
-        rsEvent rsEvent = new rsEvent("遇到困难","奥利给",user);
-        ObjectMapper objectMapper = new ObjectMapper();
+        //添加测试数据
+        UserPO saveduser = userRepository.save(UserPO.builder()
+                .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
+        rsEvent rsEvent = new rsEvent("djn牌猪肉涨价了","经济",saveduser.getId());
         String jsonString = objectMapper.writeValueAsString(rsEvent);
-        //String jsonString = "{\"eventname\":\"猪肉涨价了\",\"keyword\":\"经济\"}";
         mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
-        mockMvc.perform(get("/rs/list"))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].eventname", is("猪肉涨价了")))
-                .andExpect(jsonPath("$[0].keyword", is("经济")))
-                .andExpect(jsonPath("$[1].eventname", is("遇到困难")))
-                .andExpect(jsonPath("$[1].keyword", is("奥利给")))
-                .andExpect(status().isOk());
+        UserPO saveduser1 = userRepository.save(UserPO.builder()
+                .name("gy").age(23).gender("female").phone("16666666666").email("c@d.com").votenumber(10).build());
+        rsEvent rsEvent1 = new rsEvent("gy牌猪肉涨价了","经济",saveduser1.getId());
+        String jsonString1 = objectMapper.writeValueAsString(rsEvent1);
+        mockMvc.perform(post("/rs/event").content(jsonString1).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+        //删除其中一个热搜
+        mockMvc.perform(delete("/rs/2")).andExpect(status().isCreated());
+        List<RsEventPO> all = rsEventRepository.findAll();
+        assertEquals(1,all.size());
+        assertEquals("djn牌猪肉涨价了",all.get(0).getEventname());
+        assertEquals(saveduser.getId(),all.get(0).getUserPO().getId());
     }
-    //error-handling作业需求
+    //error-handling作业需求，因为需求变更删掉了一个添加热搜时用户不规范测试。
     @Test
-    @Order(9)
     public void should_throw_rsevent_not_valid_index_exception_when_get_and_delete() throws Exception {
+        UserPO saveduser = userRepository.save(UserPO.builder()
+                .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
+        rsEvent rsEvent = new rsEvent("猪肉涨价了","经济",saveduser.getId());
+        String jsonString = objectMapper.writeValueAsString(rsEvent);
+        mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+        //测试
         mockMvc.perform(get("/rs/0"))
                 .andExpect(jsonPath("$.error",is("invalid index")))
                 .andExpect(status().isBadRequest());
@@ -277,23 +218,23 @@ class RsControllerTest {
                 .andExpect(status().isBadRequest());
     }
     @Test
-    @Order(10)
-    public void should_throw_method_argument_not_valid_exception() throws Exception {
-        User user = new User("dgfdgfdgf","male",19,"a@b.com","18888888888");
-        rsEvent rsEvent = new rsEvent("猪肉涨价了","经济",user);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonString = objectMapper.writeValueAsString(rsEvent);
-        //String jsonString = "{\"eventname\":\"猪肉涨价了\",\"keyword\":\"经济\"}";
-        mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.error",is("invalid param")))
-                .andExpect(status().isBadRequest());
-    }
-    @Test
-    @Order(11)
     public void should_throw_rsevent_not_valid_range_exception_when_get_list() throws Exception {
+        //添加测试数据
+        UserPO saveduser = userRepository.save(UserPO.builder()
+                .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
+        rsEvent rsEvent = new rsEvent("djn牌猪肉涨价了","经济",saveduser.getId());
+        String jsonString = objectMapper.writeValueAsString(rsEvent);
+        mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+        UserPO saveduser1 = userRepository.save(UserPO.builder()
+                .name("gy").age(23).gender("female").phone("16666666666").email("c@d.com").votenumber(10).build());
+        rsEvent rsEvent1 = new rsEvent("gy牌猪肉涨价了","经济",saveduser1.getId());
+        String jsonString1 = objectMapper.writeValueAsString(rsEvent1);
+        mockMvc.perform(post("/rs/event").content(jsonString1).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+        //测试
         mockMvc.perform(get("/rs/list?start=0&end=8"))
                 .andExpect(jsonPath("$.error",is("invalid request param")))
                 .andExpect(status().isBadRequest());
     }
-
 }
