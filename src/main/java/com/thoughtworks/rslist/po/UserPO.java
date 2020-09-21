@@ -1,5 +1,7 @@
 package com.thoughtworks.rslist.po;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,9 +17,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class UserPO {
     @Id
     @GeneratedValue(generator = "userPO_id",strategy = GenerationType.AUTO)
+    //@Column(name = "usesr_id")
     private int id;
     private String name;
     private String gender;
@@ -28,5 +32,4 @@ public class UserPO {
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "userPO")
     private List<RsEventPO> rsEventPOs;
-
 }

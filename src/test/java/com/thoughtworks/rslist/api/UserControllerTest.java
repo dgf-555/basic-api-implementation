@@ -1,9 +1,8 @@
 package com.thoughtworks.rslist.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.rslist.domain.User;
-import com.thoughtworks.rslist.domain.rsEvent;
+import com.thoughtworks.rslist.domain.RsEvent;
 import com.thoughtworks.rslist.po.*;
 import com.thoughtworks.rslist.repository.RsEventRepository;
 import com.thoughtworks.rslist.repository.UserRepository;
@@ -113,19 +112,19 @@ class UserControllerTest {
         UserPO saveduser1 = userRepository.save(UserPO.builder()
                 .name("dgf").age(22).gender("male").phone("18888888888").email("a@b.com").votenumber(10).build());
         //创建热搜并添加
-        rsEvent rsEvent = new rsEvent("djn牌猪肉涨价了","经济",saveduser.getId());
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
         RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
                 .userPO(saveduser).build();
         rsEventRepository.save(rsEventPO);
-        rsEvent rsEvent1 = new rsEvent("djn牌人肉涨价了","经济",saveduser.getId());
+        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).build();
         RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
                 .userPO(saveduser).build();
         rsEventRepository.save(rsEventPO1);
-        rsEvent rsEvent2 = new rsEvent("djn牌狗肉涨价了","经济",saveduser.getId());
+        RsEvent rsEvent2 = RsEvent.builder().eventname("djn牌狗肉涨价了").keyword("经济").userid(saveduser.getId()).build();
         RsEventPO rsEventPO2 = RsEventPO.builder().eventname(rsEvent2.getEventname()).keyword(rsEvent2.getKeyword())
                 .userPO(saveduser).build();
         rsEventRepository.save(rsEventPO2);
-        rsEvent rsEvent3 = new rsEvent("dgf牌猪肉涨价了","经济",saveduser1.getId());
+        RsEvent rsEvent3 = RsEvent.builder().eventname("dgf牌猪肉涨价了").keyword("经济").userid(saveduser1.getId()).build();
         RsEventPO rsEventPO3 = RsEventPO.builder().eventname(rsEvent3.getEventname()).keyword(rsEvent3.getKeyword())
                 .userPO(saveduser1).build();
         rsEventRepository.save(rsEventPO3);

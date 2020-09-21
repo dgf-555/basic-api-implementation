@@ -1,7 +1,6 @@
 package com.thoughtworks.rslist.api;
 
-import com.thoughtworks.rslist.domain.User;
-import com.thoughtworks.rslist.domain.rsEvent;
+import com.thoughtworks.rslist.domain.RsEvent;
 import com.thoughtworks.rslist.exception.Error;
 import com.thoughtworks.rslist.exception.RsEventNotValidException;
 import com.thoughtworks.rslist.po.RsEventPO;
@@ -11,16 +10,12 @@ import com.thoughtworks.rslist.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 //import static com.sun.xml.internal.ws.api.model.wsdl.WSDLBoundOperation.ANONYMOUS.required;
@@ -59,7 +54,7 @@ public class RsController {
     if(index <1||index >rsEventRepository.findAll().size()){
       throw new RsEventNotValidException("invalid index");
     }
-    rsEvent rsEvent =new rsEvent();
+    RsEvent rsEvent =new RsEvent();
     RsEventPO rsEventPO = rsEventRepository.findById(index).get();
     rsEvent.setEventname(rsEventPO.getEventname());
     rsEvent.setKeyword(rsEventPO.getKeyword());
@@ -67,7 +62,7 @@ public class RsController {
     return ResponseEntity.ok(rsEvent);
   }
   @PostMapping("/rs/event")
-  public ResponseEntity add_rsevent(@RequestBody @Valid rsEvent rsEvent){
+  public ResponseEntity add_rsevent(@RequestBody @Valid RsEvent rsEvent){
     Optional<UserPO> userPO= userRepository.findById(rsEvent.getUserid());
     if(userRepository.existsById(rsEvent.getUserid())){
       RsEventPO buildfromrsEvent = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
@@ -80,7 +75,7 @@ public class RsController {
     }
   }
   @PatchMapping("/rs/{index}/event")
-  public ResponseEntity update_rsevent(@PathVariable int index,@RequestBody rsEvent rsEvent){
+  public ResponseEntity update_rsevent(@PathVariable int index,@RequestBody RsEvent rsEvent){
     Optional<UserPO> userPO= userRepository.findById(rsEvent.getUserid());
     RsEventPO buildfromrsEvent = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
             .userPO(userPO.get()).id(index).build();
