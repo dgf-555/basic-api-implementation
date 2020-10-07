@@ -20,8 +20,8 @@ public class RsEvent {
     private String keyword;
     @NotNull
     private int userid;
-//    @NotNull
-//    private int voteNum = 0;
+    @NotNull
+    private int voteNum = 0;
 //    @JsonIgnore
 //    public void setVoteNum(int voteNum) {
 //        this.voteNum = voteNum;

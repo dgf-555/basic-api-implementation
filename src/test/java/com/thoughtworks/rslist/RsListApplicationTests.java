@@ -43,19 +43,20 @@ class RsControllerTest {
         UserPO saveduser = userRepository.save(UserPO.builder()
                 .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
         //创建热搜并添加
-        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO);
-        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO1);
         //测试
         mockMvc.perform(get("/rs/list"))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].eventname", is("djn牌猪肉涨价了")))
                 .andExpect(jsonPath("$[0].keyword", is("经济")))
+                .andExpect(jsonPath("$[0].voteNum",is(0)))
                 .andExpect(jsonPath("$[1].eventname", is("djn牌人肉涨价了")))
                 .andExpect(jsonPath("$[1].keyword", is("经济")))
                 .andExpect(status().isOk());
@@ -67,13 +68,13 @@ class RsControllerTest {
         UserPO saveduser = userRepository.save(UserPO.builder()
                 .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
         //创建热搜并添加
-        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO);
-        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO1);
         //测试
         mockMvc.perform(get("/rs/1"))
@@ -91,42 +92,42 @@ class RsControllerTest {
         UserPO saveduser = userRepository.save(UserPO.builder()
                 .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
         //创建热搜并添加
-        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO);
-        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO1);
-        RsEvent rsEvent2 = RsEvent.builder().eventname("djn牌狗肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent2 = RsEvent.builder().eventname("djn牌狗肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO2 = RsEventPO.builder().eventname(rsEvent2.getEventname()).keyword(rsEvent2.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO2);
-//        //测试
-//        mockMvc.perform(get("/rs/list?start=1&end=2"))
-//                .andExpect(jsonPath("$", hasSize(2)))
-//                .andExpect(jsonPath("$[0].eventname", is("djn牌猪肉涨价了")))
-//                .andExpect(jsonPath("$[0].keyword", is("经济")))
-//                .andExpect(jsonPath("$[1].eventname", is("djn牌人肉涨价了")))
-//                .andExpect(jsonPath("$[1].keyword", is("经济")))
-//                .andExpect(status().isOk());
-//        mockMvc.perform(get("/rs/list?start=2&end=3"))
-//                .andExpect(jsonPath("$", hasSize(2)))
-//                .andExpect(jsonPath("$[0].eventname", is("djn牌人肉涨价了")))
-//                .andExpect(jsonPath("$[0].keyword", is("经济")))
-//                .andExpect(jsonPath("$[1].eventname", is("djn牌狗肉涨价了")))
-//                .andExpect(jsonPath("$[1].keyword", is("经济")))
-//                .andExpect(status().isOk());
-//        mockMvc.perform(get("/rs/list?start=1&end=3"))
-//                .andExpect(jsonPath("$", hasSize(3)))
-//                .andExpect(jsonPath("$[0].eventname", is("djn牌猪肉涨价了")))
-//                .andExpect(jsonPath("$[0].keyword", is("经济")))
-//                .andExpect(jsonPath("$[1].eventname", is("djn牌人肉涨价了")))
-//                .andExpect(jsonPath("$[1].keyword", is("经济")))
-//                .andExpect(jsonPath("$[2].eventname", is("djn牌狗肉涨价了")))
-//                .andExpect(jsonPath("$[2].keyword", is("经济")))
-//                .andExpect(status().isOk());
+        //测试
+        mockMvc.perform(get("/rs/list?start=1&end=2"))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].eventname", is("djn牌猪肉涨价了")))
+                .andExpect(jsonPath("$[0].keyword", is("经济")))
+                .andExpect(jsonPath("$[1].eventname", is("djn牌人肉涨价了")))
+                .andExpect(jsonPath("$[1].keyword", is("经济")))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/rs/list?start=2&end=3"))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].eventname", is("djn牌人肉涨价了")))
+                .andExpect(jsonPath("$[0].keyword", is("经济")))
+                .andExpect(jsonPath("$[1].eventname", is("djn牌狗肉涨价了")))
+                .andExpect(jsonPath("$[1].keyword", is("经济")))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/rs/list?start=1&end=3"))
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].eventname", is("djn牌猪肉涨价了")))
+                .andExpect(jsonPath("$[0].keyword", is("经济")))
+                .andExpect(jsonPath("$[1].eventname", is("djn牌人肉涨价了")))
+                .andExpect(jsonPath("$[1].keyword", is("经济")))
+                .andExpect(jsonPath("$[2].eventname", is("djn牌狗肉涨价了")))
+                .andExpect(jsonPath("$[2].keyword", is("经济")))
+                .andExpect(status().isOk());
     }
     @Test
     public void should_update_a_rsevent() throws Exception {
@@ -134,20 +135,20 @@ class RsControllerTest {
         UserPO saveduser = userRepository.save(UserPO.builder()
                 .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
         //创建热搜并添加
-        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO);
-        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO1);
-        RsEvent rsEvent2 = RsEvent.builder().eventname("djn牌狗肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent2 = RsEvent.builder().eventname("djn牌狗肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO2 = RsEventPO.builder().eventname(rsEvent2.getEventname()).keyword(rsEvent2.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO2);
         //准备要修改热搜
-        RsEvent rsEvent_update = RsEvent.builder().eventname("djn牌牛肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent_update = RsEvent.builder().eventname("djn牌牛肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         String jsonString = objectMapper.writeValueAsString(rsEvent_update);
         mockMvc.perform(patch("/rs/1/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -156,7 +157,7 @@ class RsControllerTest {
     public void should_add_rsevent_to_rslist_when_the_user_is_exist() throws Exception {
         UserPO saveduser = userRepository.save(UserPO.builder()
                 .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
-        RsEvent rsEvent = RsEvent.builder().eventname("猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("猪肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         String jsonString = objectMapper.writeValueAsString(rsEvent);
         mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -170,7 +171,7 @@ class RsControllerTest {
     public void should_return_badrequest_when_add_rsevent_and_the_user_not_exist() throws Exception {
         UserPO saveduser = userRepository.save(UserPO.builder()
                 .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
-        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(2).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(2).voteNum(0).build();
         String jsonString = objectMapper.writeValueAsString(rsEvent);
         mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -180,13 +181,13 @@ class RsControllerTest {
         //添加测试数据
         UserPO saveduser = userRepository.save(UserPO.builder()
                 .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
-        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         String jsonString = objectMapper.writeValueAsString(rsEvent);
         mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
         UserPO saveduser1 = userRepository.save(UserPO.builder()
                 .name("gy").age(23).gender("female").phone("16666666666").email("c@d.com").votenumber(10).build());
-        RsEvent rsEvent1 = RsEvent.builder().eventname("gy牌猪肉涨价了").keyword("经济").userid(saveduser1.getId()).build();
+        RsEvent rsEvent1 = RsEvent.builder().eventname("gy牌猪肉涨价了").keyword("经济").userid(saveduser1.getId()).voteNum(0).build();
         String jsonString1 = objectMapper.writeValueAsString(rsEvent1);
         mockMvc.perform(post("/rs/event").content(jsonString1).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -202,7 +203,7 @@ class RsControllerTest {
     public void should_throw_rsevent_not_valid_index_exception_when_get_and_delete() throws Exception {
         UserPO saveduser = userRepository.save(UserPO.builder()
                 .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
-        RsEvent rsEvent = RsEvent.builder().eventname("猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("猪肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         String jsonString = objectMapper.writeValueAsString(rsEvent);
         mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -219,13 +220,13 @@ class RsControllerTest {
         //添加测试数据
         UserPO saveduser = userRepository.save(UserPO.builder()
                 .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
-        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         String jsonString = objectMapper.writeValueAsString(rsEvent);
         mockMvc.perform(post("/rs/event").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
         UserPO saveduser1 = userRepository.save(UserPO.builder()
                 .name("gy").age(23).gender("female").phone("16666666666").email("c@d.com").votenumber(10).build());
-        RsEvent rsEvent1 = RsEvent.builder().eventname("gy牌猪肉涨价了").keyword("经济").userid(saveduser1.getId()).build();
+        RsEvent rsEvent1 = RsEvent.builder().eventname("gy牌猪肉涨价了").keyword("经济").userid(saveduser1.getId()).voteNum(0).build();
         String jsonString1 = objectMapper.writeValueAsString(rsEvent1);
         mockMvc.perform(post("/rs/event").content(jsonString1).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
@@ -234,19 +235,19 @@ class RsControllerTest {
                 .andExpect(jsonPath("$.error",is("invalid request param")))
                 .andExpect(status().isBadRequest());
     }
-        @Test
+    @Test
     public void return_ok_when_user_votenum_less_than_the_num_he_has() throws Exception {
         //创建用户并添加
         UserPO saveduser = userRepository.save(UserPO.builder()
                 .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
         //创建热搜并添加
-        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO);
-        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO1);
         //创建vote信息
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -254,7 +255,7 @@ class RsControllerTest {
         //测试
         String jsonString = objectMapper.writeValueAsString(vote);
         mockMvc.perform(post("/rs/vote/1").content(jsonString).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk());
+                .andExpect(status().isOk());
     }
     @Test
     public void return_badrequest_when_user_votenum_more_than_the_num_he_has() throws Exception {
@@ -262,13 +263,13 @@ class RsControllerTest {
         UserPO saveduser = userRepository.save(UserPO.builder()
                 .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
         //创建热搜并添加
-        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO);
-        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO1);
         //创建vote信息
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -279,4 +280,3 @@ class RsControllerTest {
                 .andExpect(status().isBadRequest());
     }
 }
-

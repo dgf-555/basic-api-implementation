@@ -21,7 +21,7 @@ public class RsEventPO {
     private int id;
     private String eventname;
     private String keyword;
-    //private int voteNum;
+    private int voteNum = 0;
     @ManyToOne(targetEntity = UserPO.class)
     private UserPO userPO;
 
