@@ -1,6 +1,7 @@
 package com.thoughtworks.rslist.api;
 
 import com.thoughtworks.rslist.domain.RsEvent;
+import com.thoughtworks.rslist.domain.Vote;
 import com.thoughtworks.rslist.exception.Error;
 import com.thoughtworks.rslist.exception.RsEventNotValidException;
 import com.thoughtworks.rslist.po.RsEventPO;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Optional;
 
-//import static com.sun.xml.internal.ws.api.model.wsdl.WSDLBoundOperation.ANONYMOUS.required;
 
 @RestController
 public class RsController {
@@ -89,6 +89,18 @@ public class RsController {
       return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     throw new RsEventNotValidException("invalid index");
+  }
+  @PostMapping("/rs/vote/{rsEventId}")
+  public ResponseEntity vote(@PathVariable int rsEventId, @RequestBody Vote vote){
+    UserPO userPO= userRepository.findById(vote.getUserId()).get();
+    if(vote.getVoteNum() <= userPO.getVotenumber()){
+      userPO.setVotenumber(userPO.getVotenumber()-vote.getVoteNum());
+      userRepository.save(userPO);
+      return ResponseEntity.ok(null);
+    }
+    else {
+      return ResponseEntity.badRequest().build();
+    }
   }
   @ExceptionHandler({RsEventNotValidException.class, MethodArgumentNotValidException.class})
   public ResponseEntity rsExceptionHandler(Exception e){

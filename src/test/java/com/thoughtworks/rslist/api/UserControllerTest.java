@@ -129,11 +129,11 @@ class UserControllerTest {
                 .userPO(saveduser1).build();
         rsEventRepository.save(rsEventPO3);
         //删除
-        mockMvc.perform(delete("/user/{id}",saveduser1.getId()))
+        mockMvc.perform(delete("/user/{id}",saveduser.getId()))
                 .andExpect(status().isOk());
         List<UserPO> all = userRepository.findAll();
         assertEquals(1,all.size());
         List<RsEventPO> all1 = rsEventRepository.findAll();
-        assertEquals(3,all1.size());
+        assertEquals(1,all1.size());
     }
 }

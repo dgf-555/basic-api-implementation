@@ -2,6 +2,7 @@ package com.thoughtworks.rslist;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.rslist.domain.RsEvent;
+import com.thoughtworks.rslist.domain.Vote;
 import com.thoughtworks.rslist.po.RsEventPO;
 import com.thoughtworks.rslist.po.UserPO;
 import com.thoughtworks.rslist.repository.RsEventRepository;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -232,4 +234,49 @@ class RsControllerTest {
                 .andExpect(jsonPath("$.error",is("invalid request param")))
                 .andExpect(status().isBadRequest());
     }
+        @Test
+    public void return_ok_when_user_votenum_less_than_the_num_he_has() throws Exception {
+        //创建用户并添加
+        UserPO saveduser = userRepository.save(UserPO.builder()
+                .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
+        //创建热搜并添加
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO);
+        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO1);
+        //创建vote信息
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Vote vote = Vote.builder().voteNum(5).userId(saveduser.getId()).localDateTime(localDateTime).rsEventId(1).build();
+        //测试
+        String jsonString = objectMapper.writeValueAsString(vote);
+        mockMvc.perform(post("/rs/vote/1").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+    }
+    @Test
+    public void return_badrequest_when_user_votenum_more_than_the_num_he_has() throws Exception {
+        //创建用户并添加
+        UserPO saveduser = userRepository.save(UserPO.builder()
+                .name("djn").age(22).gender("female").phone("17777777777").email("c@d.com").votenumber(10).build());
+        //创建热搜并添加
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO);
+        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
+                .userPO(saveduser).build();
+        rsEventRepository.save(rsEventPO1);
+        //创建vote信息
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Vote vote = Vote.builder().voteNum(20).userId(saveduser.getId()).localDateTime(localDateTime).rsEventId(1).build();
+        //测试
+        String jsonString = objectMapper.writeValueAsString(vote);
+        mockMvc.perform(post("/rs/vote/1").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 }
+

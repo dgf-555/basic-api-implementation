@@ -14,20 +14,19 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "vote")
 public class VotePO {
     @Id
     @GeneratedValue(generator = "votePO_id",strategy = GenerationType.AUTO)
     private int id;
+
     private int num;
-    private int userid;
-    private LocalDateTime votetime;
+    //private int userId;
+    private LocalDateTime localDateTime;
     @ManyToOne(targetEntity = UserPO.class)
     @JoinColumn(name = "user_id")
     private UserPO userPO;
     @ManyToOne(targetEntity = RsEventPO.class)
     @JoinColumn(name = "rs_event_id")
     private RsEventPO rsEventPO;
-
-
-
 }

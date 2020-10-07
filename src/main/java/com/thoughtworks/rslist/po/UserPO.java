@@ -30,6 +30,6 @@ public class UserPO {
     private String phone;
     private int votenumber=10;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userPO")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userPO")
     private List<RsEventPO> rsEventPOs;
 }
