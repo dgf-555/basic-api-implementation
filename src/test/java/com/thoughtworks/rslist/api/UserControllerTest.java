@@ -112,21 +112,21 @@ class UserControllerTest {
         UserPO saveduser1 = userRepository.save(UserPO.builder()
                 .name("dgf").age(22).gender("male").phone("18888888888").email("a@b.com").votenumber(10).build());
         //创建热搜并添加
-        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent = RsEvent.builder().eventname("djn牌猪肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO = RsEventPO.builder().eventname(rsEvent.getEventname()).keyword(rsEvent.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO);
-        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent1 = RsEvent.builder().eventname("djn牌人肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO1 = RsEventPO.builder().eventname(rsEvent1.getEventname()).keyword(rsEvent1.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO1);
-        RsEvent rsEvent2 = RsEvent.builder().eventname("djn牌狗肉涨价了").keyword("经济").userid(saveduser.getId()).build();
+        RsEvent rsEvent2 = RsEvent.builder().eventname("djn牌狗肉涨价了").keyword("经济").userid(saveduser.getId()).voteNum(0).build();
         RsEventPO rsEventPO2 = RsEventPO.builder().eventname(rsEvent2.getEventname()).keyword(rsEvent2.getKeyword())
-                .userPO(saveduser).build();
+                .userPO(saveduser).voteNum(0).build();
         rsEventRepository.save(rsEventPO2);
-        RsEvent rsEvent3 = RsEvent.builder().eventname("dgf牌猪肉涨价了").keyword("经济").userid(saveduser1.getId()).build();
+        RsEvent rsEvent3 = RsEvent.builder().eventname("dgf牌猪肉涨价了").keyword("经济").userid(saveduser1.getId()).voteNum(0).build();
         RsEventPO rsEventPO3 = RsEventPO.builder().eventname(rsEvent3.getEventname()).keyword(rsEvent3.getKeyword())
-                .userPO(saveduser1).build();
+                .userPO(saveduser1).voteNum(0).build();
         rsEventRepository.save(rsEventPO3);
         //删除
         mockMvc.perform(delete("/user/{id}",saveduser.getId()))
