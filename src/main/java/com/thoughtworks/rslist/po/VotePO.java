@@ -21,12 +21,11 @@ public class VotePO {
     private int id;
 
     private int num;
-    //private int userId;
     private LocalDateTime localDateTime;
     @ManyToOne(targetEntity = UserPO.class)
     @JoinColumn(name = "user_id")
-    private UserPO userPO;
+    private UserPO user;
     @ManyToOne(targetEntity = RsEventPO.class)
     @JoinColumn(name = "rs_event_id")
-    private RsEventPO rsEventPO;
+    private RsEventPO rsEvent;
 }
