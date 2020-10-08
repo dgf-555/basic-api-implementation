@@ -32,4 +32,7 @@ public class UserPO {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userPO")
     private List<RsEventPO> rsEventPOs;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    private List<VotePO> votePOs;
 }

@@ -25,6 +25,9 @@ public class RsEventPO {
     @ManyToOne(targetEntity = UserPO.class)
     private UserPO userPO;
 
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "rsEvent")
+    private List<VotePO> votePOs;
+
     @JsonBackReference
     public UserPO getUserPO() {
         return userPO;

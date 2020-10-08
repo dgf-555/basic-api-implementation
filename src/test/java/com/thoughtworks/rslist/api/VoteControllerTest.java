@@ -50,18 +50,6 @@ class VoteControllerTest {
                 .userPO(userPO).voteNum(0).build();
         rsEventRepository.save(rsEventPO);
     }
-//    @Test
-//    public void should_get_vote_record() throws Exception {
-//        VotePO votePO = VotePO.builder().user(userPO)
-//                .rsEvent(rsEventPO).localDateTime(LocalDateTime.now()).num(5).build();
-//        voteRepository.save(votePO);
-//        mockMvc.perform(get("/voteRecord").param("userId",String.valueOf(userPO.getId()))
-//                .param("rsEventId",String.valueOf(rsEventPO.getId())))
-//                .andExpect(jsonPath("$",hasSize(1)))
-//                .andExpect(jsonPath("$[0].userId", is(userPO.getId())))
-//                .andExpect(jsonPath("$[0].rsEventId", is(rsEventPO.getId())))
-//                .andExpect(jsonPath("$[0].voteNum", is(5)));
-//    }
     @Test
     public void should_pageble5_the_record_when_record_a_lot() throws Exception {
         for(int i = 0; i < 8; i++){
@@ -92,6 +80,46 @@ class VoteControllerTest {
                 .andExpect(jsonPath("$[2].voteNum", is(8)));
 
     }
-
-
+    @Test
+    public void should_return_all_the_record_when_give_a_priod_of_time() throws Exception {
+        //准备测试数据
+        for(int i = 0; i < 8; i++){
+            VotePO votePO = VotePO.builder().user(userPO)
+                    .rsEvent(rsEventPO).localDateTime(LocalDateTime.now()).num(i+1).build();
+            voteRepository.save(votePO);
+        }
+        LocalDateTime localDateTime = LocalDateTime.of(2018, 1, 13, 9, 43, 20);
+        VotePO votePO = VotePO.builder().user(userPO)
+                .rsEvent(rsEventPO).localDateTime(localDateTime).num(5).build();
+        voteRepository.save(votePO);
+        //测试
+        LocalDateTime startTime = LocalDateTime.of(2019, 1, 13, 9, 43, 20);
+        LocalDateTime endTime = LocalDateTime.of(2021, 1, 13, 9, 43, 20);
+        mockMvc.perform(get("/voteRecord").param("startTime",String.valueOf(startTime))
+                .param("endTime",String.valueOf(endTime))
+                .param("pageIndex","1"))
+                .andExpect(jsonPath("$",hasSize(5)))
+                .andExpect(jsonPath("$[0].userId", is(userPO.getId())))
+                .andExpect(jsonPath("$[0].rsEventId", is(rsEventPO.getId())))
+                .andExpect(jsonPath("$[0].voteNum", is(1)))
+                .andExpect(jsonPath("$[1].voteNum", is(2)))
+                .andExpect(jsonPath("$[2].voteNum", is(3)))
+                .andExpect(jsonPath("$[3].voteNum", is(4)))
+                .andExpect(jsonPath("$[4].voteNum", is(5)));
+        mockMvc.perform(get("/voteRecord").param("startTime",String.valueOf(startTime))
+                .param("endTime",String.valueOf(endTime))
+                .param("pageIndex","2"))
+                .andExpect(jsonPath("$",hasSize(3)))
+                .andExpect(jsonPath("$[0].userId", is(userPO.getId())))
+                .andExpect(jsonPath("$[0].rsEventId", is(rsEventPO.getId())))
+                .andExpect(jsonPath("$[0].voteNum", is(6)))
+                .andExpect(jsonPath("$[1].voteNum", is(7)))
+                .andExpect(jsonPath("$[2].voteNum", is(8)));
+        LocalDateTime startTime1 = LocalDateTime.of(2017, 1, 13, 9, 43, 20);
+        LocalDateTime endTime1 = LocalDateTime.of(2019, 1, 13, 9, 43, 20);
+        mockMvc.perform(get("/voteRecord").param("startTime",String.valueOf(startTime1))
+                .param("endTime",String.valueOf(endTime1))
+                .param("pageIndex","1"))
+                .andExpect(jsonPath("$",hasSize(1)));
+    }
 }
